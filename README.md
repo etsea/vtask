@@ -26,10 +26,11 @@ With VTASK, you can quickly add, list, delete, and clear tasks.
 ---
 
 ```sh
-- /a (or -a on non-Windows systems) `<task_name>`: Add a new task with the provided name.
+- /a (or -a on non-Windows systems) <task_name>: Add a new task with the provided name.
 - /l (or -l): List all the tasks.
 - /d (or -d) `<task_id>`: Delete a task with the provided ID.
 - /c (or -c): Clear all tasks.
+```
 
 ## Examples
 ---
@@ -38,6 +39,12 @@ With VTASK, you can quickly add, list, delete, and clear tasks.
 - `vtask -l`: Lists all the tasks.
 - `vtask -d 3`: Deletes the task with ID 3.
 - `vtask -c`: Clears all tasks from the list.
+
+## Screenshots
+---
+
+![VTASK Help](doc/img/vtask_01.png)
+![VTASK Usage](doc/img/vtask_02.png)
 
 ## Contributing
 ---
