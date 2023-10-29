@@ -2,6 +2,7 @@ module task
 
 import os
 import json
+import arrays
 
 pub fn init_task_repository() !TaskRepository {
 	mut file_path := os.config_dir()!
@@ -44,15 +45,18 @@ pub fn (repo TaskRepository) read_tasks() ![]Task {
 }
 
 fn find_next_id(tasks []Task, start_id int) int {
-	mut next_id := tasks.len + start_id
-
-	for id, _ in tasks {
-		if id == next_id {
-			find_next_id(tasks, start_id + 1)
+	if tasks.len == 0 {
+		return 1
+	} else {
+		mut taken_ids := []int{}
+		for task in tasks {
+			taken_ids << task.id
 		}
+		old_max_id := arrays.max(taken_ids) or {
+			return 1
+		}
+		return old_max_id + 1
 	}
-
-	return next_id
 }
 
 pub fn (repo TaskRepository) add_task(task_title string) ! {
