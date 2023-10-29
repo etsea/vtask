@@ -16,7 +16,7 @@ fn get_highest_id(tasks []task.Task) int {
 	return highest_id
 }
 
-fn get_no_digits(number int) int {
+fn get_digit_count(number int) int {
 	mut testing := number
 	mut digit_count := 0
 	for testing > 0 {
@@ -32,11 +32,11 @@ pub fn print_task_list(tasks []task.Task) {
 	tl_footer := term.h_divider('=')
 
 	high_id := get_highest_id(tasks)
-	max_digits := get_no_digits(high_id)
+	max_digits := get_digit_count(high_id)
 
 	println(tl_header)
 	for _, task in tasks {
-		pad_amt := max_digits - get_no_digits(task.id)
+		pad_amt := max_digits - get_digit_count(task.id)
 		padding := strings.repeat_string(' ', pad_amt)
 		print(padding)
 		println('[${task.id}] ${task.title}')
