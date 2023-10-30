@@ -16,23 +16,42 @@ With VTASK, you can quickly add, list, delete, and clear tasks.
 
 ## Usage
 
-`vtask [option] [arguments]`
+`vtask [command] (args)`
 
-## Options
+## Commands
 
-```sh
-- /a (or -a on non-Windows systems) <task_name>: Add a new task with the provided name.
-- /l (or -l): List all the tasks.
-- /d (or -d) `<task_id>`: Delete a task with the provided ID.
-- /c (or -c): Clear all tasks.
+```
+- add: Adds a new task.
+- list: Lists stored tasks.
+- del: Deletes a task (or tasks) by ID.
+- clear: Clears all tasks from the repository.
+- help: Prints help information.
+- version: Prints version information.
 ```
 
-## Examples
+## Usage Example
 
-- `vtask -a "Buy groceries"`: Adds a new task titled "Buy groceries".
-- `vtask -l`: Lists all the tasks.
-- `vtask -d 3`: Deletes the task with ID 3.
-- `vtask -c`: Clears all tasks from the list.
+```
+$ vtask add buy groceries
+$ vtask add study V programming
+$ vtask add print vtask list
+$ vtask list
+==== TASK LIST ============================
+[1] buy groceries
+[2] study V programming
+[3] print vtask list
+===========================================
+$ vtask del 3
+$ vtask list
+==== TASK LIST ============================
+[1] buy groceries
+[2] study V programming
+===========================================
+$ vtask clear
+$ vtask list
+==== TASK LIST ============================
+===========================================
+```
 
 ## Screenshots
 
