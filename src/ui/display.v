@@ -3,7 +3,6 @@ module ui
 import task
 import term
 import strings
-import v.pref
 
 fn get_highest_id(tasks []task.Task) int {
 	mut highest_id := 0
