@@ -3,7 +3,6 @@ module ui
 import task
 import term
 import strings
-import v.pref
 
 fn get_highest_id(tasks []task.Task) int {
 	mut highest_id := 0
@@ -42,25 +41,4 @@ pub fn print_task_list(tasks []task.Task) {
 		println('[${task.id}] ${task.title}')
 	}
 	println(tl_footer)
-}
-
-pub fn print_help_and_usage() {
-    println('VTASK - A Simple Task Management CLI')
-    println('Usage:')
-
-    is_windows := if pref.get_host_os() == pref.OS.windows { true } else { false }
-    prefix := if is_windows { '/' } else { '-' }
-
-    println('${prefix}a <task_name>   : Add a new task with the provided name.')
-    println('${prefix}l               : List all the tasks.')
-    println('${prefix}d <task_id>     : Delete a task with the provided ID.')
-    println('${prefix}c               : Clear all tasks.')
-
-    println('\nExamples:')
-    println('vtask ${prefix}a "Buy groceries"        : Adds a new task titled "Buy groceries".')
-    println('vtask ${prefix}l                        : Lists all the tasks.')
-    println('vtask ${prefix}d 3                      : Deletes the task with ID 3.')
-    println('vtask ${prefix}c                        : Clears all tasks from the list.')
-
-    println('\nNote: Ensure to provide the correct task ID when using the delete (d) option.\nIncorrect ID will result in no action.')
 }
