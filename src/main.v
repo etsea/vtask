@@ -38,7 +38,7 @@ fn main() {
 	mut del_cmd := cli.Command{
 		name: 'del'
 		description: 'Deletes a task (or tasks) by ID.'
-		usage: '3 7'
+		usage: '[task_id ...]'
 		required_args: 1
 		execute: del_func
 	}
