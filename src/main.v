@@ -3,69 +3,76 @@ module main
 import task
 import ui
 import os
-import v.pref
-
-enum TaskArg {
-	a
-	c
-	d
-	l
-}
-
-struct ArgState {
-	arg TaskArg
-	state bool
-}
-
-fn process_args(args []string) []ArgState {
-	mut returned_args := []ArgState{}
-
-	is_windows := if pref.get_host_os() == pref.OS.windows { true } else { false }
-	valid_args := [ TaskArg.a, TaskArg.c, TaskArg.d, TaskArg.l ]
-	if is_windows {
-		for arg in valid_args {
-			formatted_arg := '/${arg}'
-			current_arg := ArgState{
-				arg: arg
-				state: if formatted_arg in args { true } else { false }
-			}
-			returned_args << current_arg
-		}
-	} else {
-		for arg in valid_args {
-			formatted_arg := '-${arg}'
-			current_arg := ArgState{
-				arg: arg
-				state: if formatted_arg in args { true } else { false }
-			}
-			returned_args << current_arg
-		}
-	}
-	return returned_args
-}
+import v.vmod
+import cli
 
 fn main() {
-	repo := task.init_task_repository()!
-
-	localized_args := process_args(os.args)
-
-	for arg in localized_args {
-		if arg.arg == TaskArg.a && arg.state == true {
-			repo.add_task(os.args[2])!
-			return
-		} else if arg.arg == TaskArg.l && arg.state == true {
-			tasks := repo.read_tasks()!
-			ui.print_task_list(tasks)
-			return
-		} else if arg.arg == TaskArg.d && arg.state == true {
-			task_id := os.args[2].int()
-			repo.rm_task(task_id)!
-			return
-		} else if arg.arg == TaskArg.c && arg.state == true {
-			repo.clear()!
-			return
+	mod := vmod.decode(@VMOD_FILE) or {
+		vmod.Manifest{
+			name: 'vtask'
+			description: 'A simple CLI task manager.'
+			version: 'DEV:UNKNOWN'
 		}
 	}
 
-	ui.print_help_and_usage()
+	mut app := cli.Command{
+		name: mod.name
+		description: mod.description
+		version: mod.version
+		disable_man: true
+		disable_flags: true
+		sort_commands: true
+	}
+	mut list_cmd := cli.Command{
+		name: 'list'
+		description: 'Lists stored tasks.'
+		execute: list_func
+	}
+	mut add_cmd := cli.Command{
+		name: 'add'
+		description: 'Adds a new task.'
+		usage: '[My New Task Description]'
+		required_args: 1
+		execute: add_func
+	}
+	mut del_cmd := cli.Command{
+		name: 'del'
+		description: 'Deletes a task (or tasks) by ID.'
+		usage: '3 7'
+		required_args: 1
+		execute: del_func
+	}
+	mut clear_cmd := cli.Command{
+		name: 'clear'
+		description: 'Clears all tasks from the repository.'
+		execute: clear_func
+	}
+
+	app.add_commands([list_cmd, add_cmd, del_cmd, clear_cmd])
+	app.setup()
+	app.parse(os.args)
+}
+
+fn list_func(cmd cli.Command) ! {
+	repo := task.init_task_repository()!
+	tasks := repo.read_tasks()!
+	ui.print_task_list(tasks)
+}
+
+fn add_func(cmd cli.Command) ! {
+	task_content := cmd.args.join(' ')
+	repo := task.init_task_repository()!
+	repo.add_task(task_content)!
+}
+
+fn del_func(cmd cli.Command) ! {
+	repo := task.init_task_repository()!
+	for task_id in cmd.args {
+		repo.rm_task(task_id.int())!
+	}
+}
+
+fn clear_func(cmd cli.Command) ! {
+	repo := task.init_task_repository()!
+	repo.clear()!
 }
